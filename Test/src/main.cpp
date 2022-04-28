@@ -71,6 +71,7 @@ bool getResultMsg(ModbusMaster *node, uint8_t result)
 void ReadRegisters(){
 		uint8_t result;
 		int i;
+		node.clearResponseBuffer();
 		// Odczyt wszystkich rejestrów z zakresu adresów od 100 do 122 (Data of 1# indor unit)
 		Serial.println("Odczyt wszystkich rejestrów z zakresu adresów od 100 do 122 (Data of 1# indor unit)");
 		for (i = 100; i <= 122; i++)		// indor unit
@@ -83,6 +84,13 @@ void ReadRegisters(){
 				Serial.print(" = ");
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
+			}
+			else
+			{
+				Serial.print("Error reading Register  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
 			}
 			node.clearResponseBuffer();
 		}
@@ -99,6 +107,13 @@ void ReadRegisters(){
 				Serial.print(" = ");
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
+			}
+			else
+			{
+				Serial.print("Error reading Register  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
 			}
 			node.clearResponseBuffer();
 		}
@@ -131,6 +146,13 @@ void ReadCoils(){
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
 			}
+			else
+			{
+				Serial.print("Error reading Coil  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
+			}
 			node.clearResponseBuffer();
 		}
 		// Serial.print('\n'); will print '\n', which is a newline character (sometimes called a "line feed").
@@ -152,6 +174,13 @@ void ReadCoils(){
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
 			}
+			else
+			{
+				Serial.print("Error reading Coil  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
+			}
 			node.clearResponseBuffer();
 		}
 		Serial.print('\n');
@@ -170,6 +199,13 @@ void ReadCoils(){
 				Serial.print(" = ");
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
+			}
+			else
+			{
+				Serial.print("Error reading Coil  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
 			}
 			node.clearResponseBuffer();
 		}
@@ -190,6 +226,13 @@ void ReadCoils(){
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
 			}
+			else
+			{
+				Serial.print("Error reading Coil  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
+			}
 			node.clearResponseBuffer();
 		}
 		Serial.print('\n');
@@ -209,6 +252,13 @@ void ReadCoils(){
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
 			}
+			else
+			{
+				Serial.print("Error reading Coil  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
+			}
 			node.clearResponseBuffer();
 		}
 		Serial.print('\n');
@@ -227,6 +277,13 @@ void ReadCoils(){
 				Serial.print(" = ");
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
+			}
+			else
+			{
+				Serial.print("Error reading Coil  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
 			}
 			node.clearResponseBuffer();
 		}
@@ -248,6 +305,13 @@ void ReadCoils(){
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
 			}
+			else
+			{
+				Serial.print("Error reading Coil  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
+			}
 			node.clearResponseBuffer();
 		}
 		Serial.print('\n');
@@ -267,6 +331,13 @@ void ReadCoils(){
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
 			}
+			else
+			{
+				Serial.print("Error reading Coil  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
+			}
 			node.clearResponseBuffer();
 		}
 		Serial.print('\n');
@@ -285,6 +356,13 @@ void ReadCoils(){
 				Serial.print(" = ");
 				Serial.print('\t');      // prints a tab character
 				Serial.println(node.getResponseBuffer(0));
+			}
+			else
+			{
+				Serial.print("Error reading Coil  ");
+				Serial.print(i);
+				Serial.print("; ERROR = ");
+				Serial.println(tmpstr2);
 			}
 			node.clearResponseBuffer();
 		}
@@ -309,7 +387,7 @@ void setup() {
 	while (!Serial2) {
 		; // wait for serial2 port to connect. Needed for native USB
 	}
-
+	delay(500);
 	// Modbus slave ID 1
 	node.begin(Slave_ID, Serial2);
 	// Callbacks allow us to configure the RS485 transceiver correctly
