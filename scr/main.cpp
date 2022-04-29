@@ -1,3 +1,15 @@
+/*
+DeviceAddress sensor1 = {  0x28, 0x51, 0x80, 0x48, 0xF6, 0xFB, 0x3C, 0xCB };    // Adres czujnika #1
+DeviceAddress sensor2 = {  0x28, 0x93, 0xC6, 0x48, 0xF6, 0x2E, 0x3C, 0xE8 };    // Adres czujnika #2
+DeviceAddress sensor3 = {  0x28, 0x28, 0x07, 0x48, 0xF6, 0xA3, 0x3C, 0x5E };    // Adres czujnika #3
+DeviceAddress sensor4 = {  0x28, 0xD0, 0xFB, 0x48, 0xF6, 0x71, 0x3C, 0xC3 };    // Adres czujnika #4
+DeviceAddress sensor5 = {  0x28, 0x88, 0x40, 0x75, 0xD0, 0x01, 0x3C, 0x55 };    // Adres czujnika #5
+DeviceAddress sensor6 = {  0x28, 0x74, 0xCE, 0x48, 0xF6, 0xB0, 0x3C, 0x65 };    // Adres czujnika #6
+DeviceAddress sensor7 = {  0x28, 0x1C, 0x10, 0x48, 0xF6, 0x15, 0x3C, 0xC0 };    // Adres czujnika #7
+DeviceAddress sensor8 = {  0x28, 0xDE, 0xF6, 0x48, 0xF6, 0x58, 0x3C, 0x4F };    // Adres czujnika #8
+DeviceAddress sensor9 = {  0x28, 0x72, 0x9F, 0x48, 0xF6, 0xD4, 0x3C, 0xEE };    // Adres czujnika #9
+*/
+
 #include <Arduino.h>
 
 //Biblioteki potrzebne dla AutoConnect
@@ -32,18 +44,19 @@ int				timerIDReset = -1;	//Przetrzymuje ID Timera https://desire.giesecke.tk/in
 
 
 //Definicja bibliotegi MODBUS
-#include <ModbusMaster.h>
 /*!
   We're using a MAX485-compatible RS485 Transceiver.
   Rx/Tx is hooked up to the hardware serial port at 'Serial'.
   The Data Enable and Receiver Enable pins are hooked up as follows:
 */
+/*
+#include <ModbusMaster.h>
 #define MAX485_DE      3
 #define MAX485_RE_NEG  2
 ModbusMaster node;					// instantiate ModbusMaster object
 String tmpstr2;						// Zmienna przechoduje kody błędów z magistrali MODBUS
+*/
 
-/*
 #include "ModbusMaster.h" //https://github.com/4-20ma/ModbusMaster
 #include <HardwareSerial.h>
 #define Slave_ID 1				// Numer ID urządzenia z którym się komunikujemy
@@ -52,7 +65,7 @@ ModbusMaster node;				// instantiate ModbusMaster object
 //HardwareSerial Serial2(2); 	// there is no any sense to define since it already defined in HardwareSerial.h 
 #define RXD2 16 				// RX pin do odbierania danych
 #define TXD2 17 				// TX do wysyłania danych
-*/
+String tmpstr2;
 
 
 //STAŁE
@@ -87,20 +100,20 @@ int		minuta			= 0;		// the minute now (0-59)
 
 void preTransmission()
 {
-  digitalWrite(MAX485_RE_NEG, 1);
-  digitalWrite(MAX485_DE, 1);
+  digitalWrite(RXD2, 1);
+  digitalWrite(TXD2, 1);
 }
 
 void postTransmission()
 {
-  digitalWrite(MAX485_RE_NEG, 0);
-  digitalWrite(MAX485_DE, 0);
+  digitalWrite(RXD2, 0);
+  digitalWrite(TXD2, 0);
 }
 
 // Soft restart sterownika
 void RestartESP32()
 {
-	ESP.restart(); 	//Restartuje sterownik
+	ESP.restart(); 	// Restartuje sterownik
 }
 
 //Informacja że połączono z serwerem Blynk, synchronizacja danych
@@ -123,7 +136,7 @@ void blynkCheck()
 			Blynk.connect();
 		}
 	}
-/*
+
 	if (WiFi.status() == WL_NO_SSID_AVAIL)		//WL_NO_SSID_AVAIL: assigned when no SSID are available
 	{
 		Serial.println("No WiFi connection, offline mode.");
@@ -153,7 +166,6 @@ void blynkCheck()
 	{
 		Serial.println("WL_DISCONNECTED: disconnected from a network");
 	}
-	*/
 }
 
 //Ustawienie trybów sterowania wentylacja
@@ -577,17 +589,14 @@ static const char Version[] PROGMEM = R"(
 
 void setup()
 {
-	pinMode(MAX485_RE_NEG, OUTPUT);							// Deklaradja pinu dla MODBUS
-	pinMode(MAX485_DE, OUTPUT);								// Deklaradja pinu dla MODBUS
-	pinMode(DuctRelay, OUTPUT);								//Deklaracja pinu dla przekaźnika klapy wentylacji
-	// Init in receive mode
-	digitalWrite(MAX485_RE_NEG, 0);							// Ustawienie punu dla dla MODBUS do stanu 0
-	digitalWrite(MAX485_DE, 0);								// Ustawienie punu dla dla MODBUS do stanu 0
 
-//	pinMode(RXD2, OUTPUT);									// Deklaradja pinu dla MODBUS
-//	pinMode(TXD2, OUTPUT);									// Deklaradja pinu dla MODBUS
-//	digitalWrite(RXD2, 0);									// Ustawienie punu dla dla MODBUS do stanu 0
-//	digitalWrite(TXD2, 0);									// Ustawienie punu dla dla MODBUS do stanu 0
+	pinMode(RXD2, OUTPUT);									// Deklaradja pinu dla MODBUS
+	pinMode(TXD2, OUTPUT);									// Deklaradja pinu dla MODBUS
+	// Init in receive mode
+	digitalWrite(RXD2, 0);									// Ustawienie punu dla dla MODBUS do stanu 0
+	digitalWrite(TXD2, 0);									// Ustawienie punu dla dla MODBUS do stanu 0
+	pinMode(DuctRelay, OUTPUT);								// Deklaracja pinu dla przekaźnika klapy wentylacji
+	digitalWrite(DuctRelay, LOW);							// Ustawienie pinu w stan niski, klapa zamknięta
 
 	// Autoconnect
 	Config.hostName 		= "Gree_AC";					// Sets host name to SotAp identification
@@ -602,34 +611,29 @@ void setup()
 	Portal.config(Config);									// Don't forget it.
 	if (Portal.begin())										// Starts and behaves captive portal
 	{	
-	//	Serial.println("WiFi connected: " + WiFi.localIP().toString());
+		Serial.println("WiFi connected: " + WiFi.localIP().toString());
 	}
 
 	//WiFi.begin(ssid, pass);
-	Blynk.config(auth, server, port);   // for local servernon-blocking, even if no server connection
-	//Blynk.config(auth);				//For cloud
+	Blynk.config(auth, server, port);					// for local servernon-blocking, even if no server connection
+	//Blynk.config(auth);								// For cloud
 
 	//Inicjalizacja Timerów
-	Timer.setInterval(30000, blynkCheck);		//Co 30s zostanie sprawdzony czy jest sieć Wi-Fi i czy połączono z serwerem Blynk
-	Timer.setInterval(10000, MainFunction);		//Uruchamia wszystko w pętli co 10s
+	Timer.setInterval(30000, blynkCheck);				// Co 30s zostanie sprawdzony czy jest sieć Wi-Fi i czy połączono z serwerem Blynk
+	Timer.setInterval(10000, MainFunction);				// Uruchamia wszystko w pętli co 10s
 
 	//MODBUS
 	// Modbus communication runs at 9600 baud
-//	Serial.begin(9600, SERIAL_8N1);					// Tego portu szeregowego używamy do wypluwania danych na komputer
-//	Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2);		// Tego portu szeregowego używamy do komunikazni protokołem MODBUS
+	Serial.begin(9600, SERIAL_8N1);						// Tego portu szeregowego używamy do wypluwania danych na komputer
+	Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2);		// Tego portu szeregowego używamy do komunikazni protokołem MODBUS
+	while (!Serial) { }									// Wait for serial port to connect. Needed for native USB 
+	while (!Serial2) { }								// Wait for serial2 port to connect. Needed for native USB
 	// Modbus slave ID 1
-//	node.begin(Slave_ID, Serial2);
-//	node.idle(yield);
-
-
-	Serial.begin(9600);		// Modbus communication runs at 115200 baud
-	while (!Serial) {
-		; // wait for serial port to connect. Needed for native USB 
-	}
-	node.begin(1, Serial);	// Modbus slave ID 1
-	// Callbacks allow us to configure the RS485 transceiver correctly
+	node.begin(Slave_ID, Serial2);
 	node.preTransmission(preTransmission);
 	node.postTransmission(postTransmission);
+	node.readHoldingRegisters(100, 1);					// Pierwsze wywołanie zawsze zwracało błąd więc dywołujemy ale go nie odczytujemy
+	//node.idle(yield);
 }
 
 
@@ -640,7 +644,7 @@ void loop()
 
 	if (WiFi.status() == WL_CONNECTED)
 	{
-				// Here to do when WiFi is connected.
+		// Here to do when WiFi is connected.
 		if (Blynk.connected())
 		{
 			Blynk.run();
@@ -649,17 +653,17 @@ void loop()
 		{
 			Blynk.connect();
 		}
-		//OTA_Handle();			//Obsługa OTA (Over The Air) wgrywanie nowego kodu przez Wi-Fi
+
 		if(Timer.isEnabled( timerIDReset ))
 		{
 			Timer.deleteTimer( timerIDReset );
 		}
 	}
-	else	//Zrestartuje sterownik jeśli brak sieci przez 5min
+	else	// Zrestartuje sterownik jeśli brak sieci przez 5min
 	{
 		if (Timer.isEnabled( timerIDReset ) == false)
 		{
-			timerIDReset = Timer.setTimeout( 300000, RestartESP32 ); //300000
+			timerIDReset = Timer.setTimeout( 300000, RestartESP32 ); 		// 300000 Milliseconds = 5 Minutes
 		}
 		delay(1500);
 	}
