@@ -14,7 +14,7 @@ ModbusMaster node;				// instantiate ModbusMaster object
 //HardwareSerial Serial2(2); 	// there is no any sense to define since it already defined in HardwareSerial.h 
 #define RXD2 16 				// RX pin do odbierania danych
 #define TXD2 17 				// TX do wysyłania danych
-String tmpstr2;					// Zmienna przechoduje kody błędów z magistrali MODBUS
+String ErrorCode;					// Zmienna przechoduje kody błędów z magistrali MODBUS
 
 void preTransmission()
 {
@@ -31,38 +31,38 @@ void postTransmission()
 // Zwraca kody błędów z magistrali MODBUS
 bool getResultMsg(ModbusMaster *node, uint8_t result) 
 {
-	tmpstr2="";
+	ErrorCode="";
 	switch (result) 
 	{
 		case node->ku8MBSuccess:
 			return true;
 			break;
 		case node->ku8MBIllegalFunction:
-			tmpstr2 += "Illegal Function";
+			ErrorCode += "Illegal Function";
 			break;
 		case node->ku8MBIllegalDataAddress:
-			tmpstr2 += "Illegal Data Address";
+			ErrorCode += "Illegal Data Address";
 			break;
 		case node->ku8MBIllegalDataValue:
-			tmpstr2 += "Illegal Data Value";
+			ErrorCode += "Illegal Data Value";
 			break;
 		case node->ku8MBSlaveDeviceFailure:
-			tmpstr2 += "Slave Device Failure";
+			ErrorCode += "Slave Device Failure";
 			break;
 		case node->ku8MBInvalidSlaveID:
-			tmpstr2 += "Invalid Slave ID";
+			ErrorCode += "Invalid Slave ID";
 			break;
 		case node->ku8MBInvalidFunction:
-			tmpstr2 += "Invalid Function";
+			ErrorCode += "Invalid Function";
 			break;
 		case node->ku8MBResponseTimedOut:
-			tmpstr2 += "Response Timed Out";
+			ErrorCode += "Response Timed Out";
 			break;
 		case node->ku8MBInvalidCRC:
-			tmpstr2 += "Invalid CRC";
+			ErrorCode += "Invalid CRC";
 			break;
 		default:
-			tmpstr2 += "Unknown error: " + String(result);
+			ErrorCode += "Unknown error: " + String(result);
 			break;
 	}
 	return false;
@@ -90,7 +90,7 @@ void ReadRegisters(){
 				Serial.print("Error reading Register  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -113,7 +113,7 @@ void ReadRegisters(){
 				Serial.print("Error reading Register  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -151,7 +151,7 @@ void ReadCoils(){
 				Serial.print("Error reading Coil  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -179,7 +179,7 @@ void ReadCoils(){
 				Serial.print("Error reading Coil  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -205,7 +205,7 @@ void ReadCoils(){
 				Serial.print("Error reading Coil  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -231,7 +231,7 @@ void ReadCoils(){
 				Serial.print("Error reading Coil  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -257,7 +257,7 @@ void ReadCoils(){
 				Serial.print("Error reading Coil  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -283,7 +283,7 @@ void ReadCoils(){
 				Serial.print("Error reading Coil  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -310,7 +310,7 @@ void ReadCoils(){
 				Serial.print("Error reading Coil  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -336,7 +336,7 @@ void ReadCoils(){
 				Serial.print("Error reading Coil  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -362,7 +362,7 @@ void ReadCoils(){
 				Serial.print("Error reading Coil  ");
 				Serial.print(i);
 				Serial.print("; ERROR = ");
-				Serial.println(tmpstr2);
+				Serial.println(ErrorCode);
 			}
 			node.clearResponseBuffer();
 		}
@@ -393,7 +393,8 @@ void setup() {
 	// Callbacks allow us to configure the RS485 transceiver correctly
 	node.preTransmission(preTransmission);
 	node.postTransmission(postTransmission);
-	node.idle(yield);
+	node.readHoldingRegisters(100, 1);		//Pierwsze wywołanie zawsze zwracało błąd więc dywołujemy ale go nie odczytujemy
+	//node.idle(yield);
 
 	ReadRegisters();
 	ReadCoils();
