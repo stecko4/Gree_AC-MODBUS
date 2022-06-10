@@ -14,7 +14,7 @@ ModbusMaster node;				// instantiate ModbusMaster object
 //HardwareSerial Serial2(2); 	// there is no any sense to define since it already defined in HardwareSerial.h 
 #define RXD2 16 				// RX pin do odbierania danych
 #define TXD2 17 				// TX do wysyłania danych
-String ErrorCode;					// Zmienna przechoduje kody błędów z magistrali MODBUS
+String ErrorCode;				// Zmienna przechoduje kody błędów z magistrali MODBUS
 
 void preTransmission()
 {
@@ -74,7 +74,7 @@ void ReadRegisters(){
 		node.clearResponseBuffer();
 		// Odczyt wszystkich rejestrów z zakresu adresów od 100 do 122 (Data of 1# indor unit)
 		Serial.println("Odczyt wszystkich rejestrów z zakresu adresów od 100 do 122 (Data of 1# indor unit)");
-		for (i = 100; i <= 122; i++)		// indor unit
+		for (i = 40100; i <= 40122; i++)		// indor unit
 		{	
 			result = node.readHoldingRegisters(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -97,7 +97,7 @@ void ReadRegisters(){
 		Serial.print('\n');
 		// Odczyt wszystkich rejestrów z zakresu adresów od 3301 do 3308  (Data of 1# indor unit)
 		Serial.println("Odczyt wszystkich rejestrów z zakresu adresów od 3301 do 3308 (Data of 1# outdor unit)");
-		for (i = 3301; i <= 3308; i++)		// outdor unit
+		for (i = 43301; i <= 43308; i++)		// outdor unit
 		{	
 			result = node.readHoldingRegisters(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -135,7 +135,7 @@ void ReadCoils(){
 		// Odczyt wszystkich coilsów z zakresu adresów od 87 do 102 (Outdor uni1 1~16, with or without)
 		Serial.println("Odczyt wszystkich coilsów z zakresu adresów od 87 do 102 (Outdor uni1 1~16, 1: with or 0: without)");
 		Serial.println("READ ONLY");
-		for (i = 100; i <= 102; i++)		// indor unit
+		for (i = 30100; i <= 30102; i++)		// indor unit
 		{	
 			result = node.readCoils(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -163,7 +163,7 @@ void ReadCoils(){
 		// Odczyt wszystkich coilsów z zakresu adresów od 119 do 247  (Indor unit 1~16, with or without)
 		Serial.println("Odczyt wszystkich coilsów z zakresu adresów od 119 do 247  (Indor unit 1~16, 1: with or 0: without)");
 		Serial.println("READ ONLY");
-		for (i = 119; i <= 247; i++)		// outdor unit
+		for (i = 30119; i <= 30247; i++)		// outdor unit
 		{	
 			result = node.readCoils(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -189,7 +189,7 @@ void ReadCoils(){
 		// Odczyt wszystkich coilsów z zakresu adresów od 247 do 262  (Outdor unit 1~16, remote emergency stop signal, 0:off or 1: on)
 		Serial.println("Odczyt wszystkich coilsów z zakresu adresów od 247 do 262  (Outdor unit 1~16, remote emergency stop signal, 0:off or 1: on)");
 		Serial.println("READ & WRITE");
-		for (i = 247; i <= 262; i++)		// outdor unit
+		for (i = 30247; i <= 30262; i++)		// outdor unit
 		{	
 			result = node.readCoils(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -215,7 +215,7 @@ void ReadCoils(){
 		// Odczyt wszystkich coilsów z zakresu adresów od 247 do 262  (Outdor unit 1~16, remote emergency stop signal, 0:off or 1: on)
 		Serial.println("Odczyt wszystkich coilsów z zakresu adresów od 247 do 262  (Outdor unit 1~16, remote emergency stop signal, 0:off or 1: on)");
 		Serial.println("WRITE ONLY");
-		for (i = 279; i <= 280; i++)		// outdor unit
+		for (i = 30279; i <= 30280; i++)		// outdor unit
 		{	
 			result = node.readCoils(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -241,7 +241,7 @@ void ReadCoils(){
 		// Odczyt wszystkich coilsów z zakresu adresów od 287 do 307  (Data of 1# indor unit)
 		Serial.println("Odczyt wszystkich coilsów z zakresu adresów od 287 do 307  (Data of 1# indor unit)");
 		Serial.println("READ & WRITE");
-		for (i = 287; i <= 307; i++)		// outdor unit
+		for (i = 30287; i <= 30307; i++)		// outdor unit
 		{	
 			result = node.readCoils(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -267,7 +267,7 @@ void ReadCoils(){
 		// Odczyt wszystkich coilsów z zakresu adresów od 314 do 318  (Data of 1# indor unit)
 		Serial.println("Odczyt wszystkich coilsów z zakresu adresów od 314 do 318  (Data of 1# indor unit)");
 		Serial.println("READ ONLY");
-		for (i = 314; i <= 318; i++)		// outdor unit
+		for (i = 30314; i <= 30318; i++)		// outdor unit
 		{	
 			result = node.readCoils(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -294,7 +294,7 @@ void ReadCoils(){
 		// Odczyt wszystkich coilsów z zakresu adresów od 8487 do 8494  (Data of 1# outdor unit)
 		Serial.println("Odczyt wszystkich coilsów z zakresu adresów od 8487 do 8494  (Data of 1# outdor unit)");
 		Serial.println("READ ONLY");
-		for (i = 8487; i <= 8494; i++)		// outdor unit
+		for (i = 38487; i <= 38494; i++)		// outdor unit
 		{	
 			result = node.readCoils(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -320,7 +320,7 @@ void ReadCoils(){
 		// Odczyt wszystkich coilsów z zakresu adresów od 9247 do 9254  (D0 area)
 		Serial.println("Odczyt wszystkich coilsów z zakresu adresów od 9247 do 9254  (D0 area)");
 		Serial.println("READ & WRITE");
-		for (i = 9247; i <= 9254; i++)		// outdor unit
+		for (i = 39247; i <= 39254; i++)		// outdor unit
 		{	
 			result = node.readCoils(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -346,7 +346,7 @@ void ReadCoils(){
 		// Odczyt wszystkich coilsów z zakresu adresów od 9255 do 9262  (D1 area)
 		Serial.println("Odczyt wszystkich coilsów z zakresu adresów od 9255 do 9262  (D1 area)");
 		Serial.println("READ ONLY");
-		for (i = 9255; i <= 9262; i++)		// outdor unit
+		for (i = 39255; i <= 39262; i++)		// outdor unit
 		{	
 			result = node.readCoils(i, 1);
 			if (getResultMsg(&node, result)) 
@@ -393,7 +393,7 @@ void setup() {
 	// Callbacks allow us to configure the RS485 transceiver correctly
 	node.preTransmission(preTransmission);
 	node.postTransmission(postTransmission);
-	node.readHoldingRegisters(100, 1);		//Pierwsze wywołanie zawsze zwracało błąd więc dywołujemy ale go nie odczytujemy
+	node.readHoldingRegisters(40100, 1);		//Pierwsze wywołanie zawsze zwracało błąd więc dywołujemy ale go nie odczytujemy
 	//node.idle(yield);
 
 	ReadRegisters();
